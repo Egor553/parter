@@ -2,9 +2,10 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Mentor } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 export async function findBestMentor(query: string, mentors: Mentor[]): Promise<string> {
+  // Инициализируем AI внутри функции, чтобы использовать актуальный ключ из process.env
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+  
   const mentorContext = mentors.map(m => `ID: ${m.id}, Имя: ${m.name}, Индустрия: ${m.industry}, Описание: ${m.description}, Ценности: ${m.values.join(', ')}`).join('\n');
   
   const response = await ai.models.generateContent({
